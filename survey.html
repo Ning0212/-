@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>適性測驗</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: center;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+            text-align: center;
+        }
+        canvas {
+            width: 100% !important;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>適性測驗</h1>
+        <form id="quiz-form">
+            <!-- 這裡是前面的問題部分（問題1-10） -->
+            <div class="question">
+                <p>1. 在一個社交活動中，你遇到了一群陌生人，你會怎麼做？</p>
+                <label><input type="radio" name="q1" value="4" required> 主動介紹自己並開始交談。</label><br>
+                <label><input type="radio" name="q1" value="3"> 等待別人來接觸自己。</label><br>
+                <label><input type="radio" name="q1" value="2"> 找到一個熟悉的朋友，並與他們待在一起。</label><br>
+                <label><input type="radio" name="q1" value="1"> 找一個安靜的角落，避免交談。</label><br>
+            </div>
+            <div class="question">
+                <p>2. 當你發現同事心情不好時，你會怎麼做？</p>
+                <label><input type="radio" name="q2" value="4" required> 主動關心並詢問是否需要幫助。</label><br>
+                <label><input type="radio" name="q2" value="3"> 假裝沒注意到，繼續做自己的事情。</label><br>
+                <label><input type="radio" name="q2" value="2"> 通過其他同事了解情況。</label><br>
+                <label><input type="radio" name="q2" value="1"> 等待對方主動來找你談話。</label><br>
+            </div>
+            <div class="question">
+                <p>3. 在公司舉辦的團隊建設活動中，你會怎麼做？</p>
+                <label><input type="radio" name="q3" value="4" required> 積極參與並帶動大家的氣氛。</label><br>
+                <label><input type="radio" name="q3" value="3"> 參與活動，但主要與自己熟悉的人互動。</label><br>
+                <label><input type="radio" name="q3" value="2"> 參與活動，但不主動互動。</label><br>
+                <label><input type="radio" name="q3" value="1"> 找藉口不參加活動。</label><br>
+            </div>
+            <div class="question">
+                <p>4. 當你與新同事合作時，你會怎麼做？</p>
+                <label><input type="radio" name="q4" value="4" required> 主動介紹自己並了解對方。</label><br>
+                <label><input type="radio" name="q4" value="3"> 等待對方先來接觸你。</label><br>
+                <label><input type="radio" name="q4" value="2"> 僅限於工作交流，不主動交朋友。</label><br>
+                <label><input type="radio" name="q4" value="1"> 只在必要時才與對方交流。</label><br>
+            </div>
+            <div class="question">
+                <p>5. 在與顧客互動時，你會怎麼做？</p>
+                <label><input type="radio" name="q5" value="4" required> 主動問候並了解顧客需求。</label><br>
+                <label><input type="radio" name="q5" value="3"> 等待顧客詢問後再回應。</label><br>
+                <label><input type="radio" name="q5" value="2"> 只回答顧客的直接問題。</label><br>
+                <label><input type="radio" name="q5" value="1"> 盡量減少與顧客的互動。</label><br>
+            </div>
+            <div class="question">
+                <p>6. 當你遇到不同文化和背景的顧客時，你會怎麼做？</p>
+                <label><input type="radio" name="q6" value="4" required> 主動了解對方的文化背景並表現尊重。</label><br>
+                <label><input type="radio" name="q6" value="3"> 嘗試適應對方的溝通方式。</label><br>
+                <label><input type="radio" name="q6" value="2"> 僅在必要時與對方互動。</label><br>
+                <label><input type="radio" name="q6" value="1"> 避免與對方進行深度交流。</label><br>
+            </div>
+            <div class="question">
+                <p>7. 在與客戶交談時，客戶突然提到了一個與你們產品無關的問題，你會怎麼做？</p>
+                <label><input type="radio" name="q7" value="4" required> 認真傾聽並給予適當的回應。</label><br>
+                <label><input type="radio" name="q7" value="3"> 立即轉回到產品話題。</label><br>
+                <label><input type="radio" name="q7" value="2"> 表示自己不清楚，並建議他找其他人。</label><br>
+                <label><input type="radio" name="q7" value="1"> 漠視這個問題，繼續自己的介紹。</label><br>
+            </div>
+            <div class="question">
+                <p>8. 當客戶提出了一個你無法立即回答的問題時，你會怎麼做？</p>
+                <label><input type="radio" name="q8" value="4" required> 認真記錄問題，並承諾會在之後給予回覆。</label><br>
+                <label><input type="radio" name="q8" value="3"> 隨便給出一個答案，避免顯得無知。</label><br>
+                <label><input type="radio" name="q8" value="2"> 改變話題，避免回答。</label><br>
+                <label><input type="radio" name="q8" value="1"> 告訴客戶你不知道，但會幫他找答案。</label><br>
+            </div>
+            <div class="question">
+                <p>9. 當客戶抱怨產品質量時，你會怎麼做？</p>
+                <label><input type="radio" name="q9" value="4" required> 認真傾聽並記錄問題，承諾會解決。</label><br>
+                <label><input type="radio" name="q9" value="3"> 為產品辯護，解釋問題原因。</label><br>
+                <label><input type="radio" name="q9" value="2"> 表示理解，但沒有具體回應。</label><br>
+                <label><input type="radio" name="q9" value="1"> 忽視抱怨，轉移話題。</label><br>
+            </div>
+            <div class="question">
+                <p>10. 在與客戶的會議中，客戶頻繁打斷你的演示，你會怎麼做？</p>
+                <label><input type="radio" name="q10" value="4" required> 停下來傾聽客戶的意見並進行互動。</label><br>
+                <label><input type="radio" name="q10" value="3"> 繼續演示，等客戶結束後再回答問題。</label><br>
+                <label><input type="radio" name="q10" value="2"> 提醒客戶讓你先完成演示。</label><br>
+                <label><input type="radio" name="q10" value="1"> 表現出不耐煩，希望客戶停止打斷。</label><br>
+            </div>
+            <!-- 中間的問題部分（問題11-25） -->
+            <div class="question">
+                <p>11. 當客戶發出非語言線索（如表情或肢體語言）表示不滿時，你會怎麼做？</p>
+                <label><input type="radio" name="q11" value="4" required> 立即詢問客戶是否有問題需要解決。</label><br>
+                <label><input type="radio" name="q11" value="3"> 繼續講解產品，等待客戶發問。</label><br>
+                <label><input type="radio" name="q11" value="2"> 稍微調整自己的話題，但不直接詢問。</label><br>
+                <label><input type="radio" name="q11" value="1"> 忽視非語言線索，繼續進行演示。</label><br>
+            </div>
+            <div class="question">
+                <p>12. 在持續的客戶反饋過程中，你會怎麼做？</p>
+                <label><input type="radio" name="q12" value="4" required> 定期跟進客戶反饋，持續改進服務。</label><br>
+                <label><input type="radio" name="q12" value="3"> 只在客戶提出具體問題時才回應。</label><br>
+                <label><input type="radio" name="q12" value="2"> 收到反饋後偶爾回應，但不主動跟進。</label><br>
+                <label><input type="radio" name="q12" value="1"> 很少回應客戶反饋，主要專注於自己的工作。</label><br>
+            </div>
+            <div class="question">
+                <p>13. 在一次重要會議上，你需要做一個關鍵的報告，但你還沒完全準備好，你會怎麼做？</p>
+                <label><input type="radio" name="q13" value="4" required> 大膽上台，盡可能地表現自己。</label><br>
+                <label><input type="radio" name="q13" value="3"> 請求推遲報告時間，以便有更多準備時間。</label><br>
+                <label><input type="radio" name="q13" value="2"> 尋求同事的幫助，共同完成報告。</label><br>
+                <label><input type="radio" name="q13" value="1"> 表示自己還沒準備好，放棄報告。</label><br>
+            </div>
+            <div class="question">
+                <p>14. 當你接到一個具有挑戰性的任務時，你會怎麼做？</p>
+                <label><input type="radio" name="q14" value="4" required> 接受挑戰，並積極尋求解決方案。</label><br>
+                <label><input type="radio" name="q14" value="3"> 請求上司分配給他人。</label><br>
+                <label><input type="radio" name="q14" value="2"> 猶豫一段時間後接受。</label><br>
+                <label><input type="radio" name="q14" value="1"> 直接拒絕，避免失敗。</label><br>
+            </div>
+            <div class="question">
+                <p>15. 你需要在公司內部展示一個新的想法，你會怎麼做？</p>
+                <label><input type="radio" name="q15" value="4" required> 積極準備並自信地進行展示。</label><br>
+                <label><input type="radio" name="q15" value="3"> 向同事請教，確保想法完善。</label><br>
+                <label><input type="radio" name="q15" value="2"> 觀察他人的反應，決定是否展示。</label><br>
+                <label><input type="radio" name="q15" value="1"> 擔心被拒絕，選擇不展示。</label><br>
+            </div>
+            <div class="question">
+                <p>16. 當你認為自己的觀點是正確的，而大多數人持反對意見時，你會怎麼做？</p>
+                <label><input type="radio" name="q16" value="4" required> 堅持自己的觀點，並提供證據支持。</label><br>
+                <label><input type="radio" name="q16" value="3"> 嘗試理解他人的觀點，進行調整。</label><br>
+                <label><input type="radio" name="q16" value="2"> 在小範圍內保持自己的觀點。</label><br>
+                <label><input type="radio" name="q16" value="1"> 放棄自己的觀點，迎合大多數人的意見。</label><br>
+            </div>
+            <div class="question">
+                <p>17. 當你在高壓情況下工作時，你會怎麼做？</p>
+                <label><input type="radio" name="q17" value="4" required> 保持冷靜，自信地完成任務。</label><br>
+                <label><input type="radio" name="q17" value="3"> 請求上司或同事的幫助。</label><br>
+                <label><input type="radio" name="q17" value="2"> 感到壓力較大，但還能應對。</label><br>
+                <label><input type="radio" name="q17" value="1"> 表現出焦慮和不安，影響工作。</label><br>
+            </div>
+            <div class="question">
+                <p>18. 當你需要即興發揮時，你會怎麼做？</p>
+                <label><input type="radio" name="q18" value="4" required> 自信地進行即興演講或表現。</label><br>
+                <label><input type="radio" name="q18" value="3"> 稍加準備，再進行即興發揮。</label><br>
+                <label><input type="radio" name="q18" value="2"> 盡量避免即興，尋求準備時間。</label><br>
+                <label><input type="radio" name="q18" value="1"> 感到不安和緊張，拒絕即興發揮。</label><br>
+            </div>
+            <div class="question">
+                <p>19. 你在工作中遇到了一個困難的項目，你會怎麼做？</p>
+                <label><input type="radio" name="q19" value="4" required> 投入更多時間和精力，努力克服困難。</label><br>
+                <label><input type="radio" name="q19" value="3"> 嘗試找到捷徑，盡量減少投入。</label><br>
+                <label><input type="radio" name="q19" value="2"> 向上司請求重新分配工作。</label><br>
+                <label><input type="radio" name="q19" value="1"> 尋找借口，推卸責任。</label><br>
+            </div>
+            <div class="question">
+                <p>20. 你的公司組織了一個與工作相關的研討會，你會怎麼做？</p>
+                <label><input type="radio" name="q20" value="4" required> 積極參加，並準備在會上發言。</label><br>
+                <label><input type="radio" name="q20" value="3"> 如果時間允許，會參加。</label><br>
+                <label><input type="radio" name="q20" value="2"> 只有被強制要求才會參加。</label><br>
+                <label><input type="radio" name="q20" value="1"> 找理由避免參加。</label><br>
+            </div>
+            <div class="question">
+                <p>21. 當你在一個項目中感到疲倦時，你會怎麼做？</p>
+                <label><input type="radio" name="q21" value="4" required> 重新激發自己的興趣，繼續努力。</label><br>
+                <label><input type="radio" name="q21" value="3"> 暫時休息，之後再繼續。</label><br>
+                <label><input type="radio" name="q21" value="2"> 請求減少工作量。</label><br>
+                <label><input type="radio" name="q21" value="1"> 轉移到其他較輕鬆的任務。</label><br>
+            </div>
+            <div class="question">
+                <p>22. 當你看到公司的新產品時，你會怎麼做？</p>
+                <label><input type="radio" name="q22" value="4" required> 主動了解並推薦給客戶。</label><br>
+                <label><input type="radio" name="q22" value="3"> 等待上司的指示再行動。</label><br>
+                <label><input type="radio" name="q22" value="2"> 表示興趣，但沒有具體行動。</label><br>
+                <label><input type="radio" name="q22" value="1"> 覺得與自己無關，不去關注。</label><br>
+            </div>
+            <div class="question">
+                <p>23. 在日常工作中，你會如何表現出對工作的熱情？</p>
+                <label><input type="radio" name="q23" value="4" required> 主動尋找新的挑戰和機會。</label><br>
+                <label><input type="radio" name="q23" value="3"> 保持穩定的工作節奏，完成任務。</label><br>
+                <label><input type="radio" name="q23" value="2"> 只對有趣的工作表現出熱情。</label><br>
+                <label><input type="radio" name="q23" value="1"> 完成基本工作，不額外投入。</label><br>
+            </div>
+            <div class="question">
+                <p>24. 你如何表現出對同事和團隊的熱情？</p>
+                <label><input type="radio" name="q24" value="4" required> 積極參與團隊活動並提供支持。</label><br>
+                <label><input type="radio" name="q24" value="3"> 在需要時提供幫助，但不主動參與。</label><br>
+                <label><input type="radio" name="q24" value="2"> 主要關注自己的工作，少與他人互動。</label><br>
+                <label><input type="radio" name="q24" value="1"> 只在有利益關聯時才與他人互動。</label><br>
+            </div>
+            <div class="question">
+                <p>25. 你設定了一個季度目標，但看起來很難達成，你會怎麼做？</p>
+                <label><input type="radio" name="q25" value="4" required> 調整策略，繼續努力實現目標。</label><br>
+                <label><input type="radio" name="q25" value="3"> 向上司報告，請求降低目標。</label><br>
+                <label><input type="radio" name="q25" value="2"> 認為這個目標不可能達成，放棄努力。</label><br>
+                <label><input type="radio" name="q25" value="1"> 部分完成目標，認為這樣也可以接受。</label><br>
+            </div>
+            <div class="question">
+                <p>26. 你有機會參加一個能提升你職業發展的項目，但需要額外投入時間和精力，你會怎麼做？</p>
+                <label><input type="radio" name="q26" value="4" required> 毫不猶豫地參加，並全力以赴。</label><br>
+                <label><input type="radio" name="q26" value="3"> 考慮是否值得，最終決定參加。</label><br>
+                <label><input type="radio" name="q26" value="2"> 覺得太辛苦，選擇放棄。</label><br>
+                <label><input type="radio" name="q26" value="1"> 先觀察，再決定是否參加。</label><br>
+            </div>
+            <div class="question">
+                <p>27. 當你的努力沒有立即得到回報時，你會怎麼做？</p>
+                <label><input type="radio" name="q27" value="4" required> 繼續努力，相信回報最終會到來。</label><br>
+                <label><input type="radio" name="q27" value="3"> 調整策略，嘗試不同的方法。</label><br>
+                <label><input type="radio" name="q27" value="2"> 對結果感到失望，但會繼續。</label><br>
+                <label><input type="radio" name="q27" value="1"> 覺得努力無效，選擇放棄。</label><br>
+            </div>
+            <div class="question">
+                <p>28. 你在一個競爭激烈的環境中工作，你會怎麼做？</p>
+                <label><input type="radio" name="q28" value="4" required> 全力以赴，爭取成為最佳。</label><br>
+                <label><input type="radio" name="q28" value="3"> 努力工作，但不會過度競爭。</label><br>
+                <label><input type="radio" name="q28" value="2"> 覺得壓力大，保持現狀即可。</label><br>
+                <label><input type="radio" name="q28" value="1"> 盡量避免競爭，專注於其他事情。</label><br>
+            </div>
+            <div class="question">
+                <p>29. 當你面對長期職業發展目標時，你會怎麼做？</p>
+                <label><input type="radio" name="q29" value="4" required> 制定詳細計劃，逐步實現目標。</label><br>
+                <label><input type="radio" name="q29" value="3"> 設定中途目標，逐步推進。</label><br>
+                <label><input type="radio" name="q29" value="2"> 覺得長期目標難以實現，選擇短期目標。</label><br>
+                <label><input type="radio" name="q29" value="1"> 覺得目標太遙遠，無法開始。</label><br>
+            </div>
+            <div class="question">
+                <p>30. 當你有機會學習新技能時，你會怎麼做？</p>
+                <label><input type="radio" name="q30" value="4" required> 主動學習，並應用到工作中。</label><br>
+                <label><input type="radio" name="q30" value="3"> 在有時間的情況下學習。</label><br>
+                <label><input type="radio" name="q30" value="2"> 只在需要時學習，平時不主動。</label><br>
+                <label><input type="radio" name="q30" value="1"> 覺得學習新技能太麻煩，選擇不學習。</label><br>
+            </div>
+            <div class="question">
+                <p>31. 當你的團隊遇到困難時，你會怎麼做？</p>
+                <label><input type="radio" name="q31" value="4" required> 主動鼓勵大家，並提出解決方案。</label><br>
+                <label><input type="radio" name="q31" value="3"> 等待上司或其他成員來解決。</label><br>
+                <label><input type="radio" name="q31" value="2"> 保持沉默，等待事情過去。</label><br>
+                <label><input type="radio" name="q31" value="1"> 向團隊成員抱怨，並表示無能為力。</label><br>
+            </div>
+            <div class="question">
+                <p>32. 當你遇到意外情況時，你會怎麼做？</p>
+                <label><input type="radio" name="q32" value="4" required> 迅速適應變化，並調整自己的計劃。</label><br>
+                <label><input type="radio" name="q32" value="3"> 暫時停止工作，等待情況穩定。</label><br>
+                <label><input type="radio" name="q32" value="2"> 感到不知所措，無法應對。</label><br>
+                <label><input type="radio" name="q32" value="1"> 表現出焦慮，影響工作進度。</label><br>
+            </div>
+            <!-- 這裡是後面的問題部分（問題33-36） -->
+            <div class="question">
+                <p>33. 當你有機會學習新技能時，你會怎麼做？</p>
+                <label><input type="radio" name="q33" value="4" required> 主動學習，並應用到工作中。</label><br>
+                <label><input type="radio" name="q33" value="3"> 在有時間的情況下學習。</label><br>
+                <label><input type="radio" name="q33" value="2"> 只在需要時學習，平時不主動。</label><br>
+                <label><input type="radio" name="q33" value="1"> 覺得學習新技能太麻煩，選擇不學習。</label><br>
+            </div>
+            <div class="question">
+                <p>34. 當你面對長期目標和持久性挑戰時，你會怎麼做？</p>
+                <label><input type="radio" name="q34" value="4" required> 制定詳細計劃，逐步實現目標。</label><br>
+                <label><input type="radio" name="q34" value="3"> 設定中途目標，逐步推進。</label><br>
+                <label><input type="radio" name="q34" value="2"> 覺得長期目標難以實現，選擇短期目標。</label><br>
+                <label><input type="radio" name="q34" value="1"> 覺得目標太遙遠，無法開始。</label><br>
+            </div>
+            <div class="question">
+                <p>35. 當你在處理一個複雜問題時，你會怎麼做？</p>
+                <label><input type="radio" name="q35" value="4" required> 分解問題，逐步解決每個部分。</label><br>
+                <label><input type="radio" name="q35" value="3"> 嘗試找到捷徑，盡快解決問題。</label><br>
+                <label><input type="radio" name="q35" value="2"> 向其他人尋求幫助，一起解決問題。</label><br>
+                <label><input type="radio" name="q35" value="1"> 覺得問題太複雜，無法處理。</label><br>
+            </div>
+            <div class="question">
+                <p>36. 當你需要為一個重要決策做出選擇，你會怎麼做？</p>
+                <label><input type="radio" name="q36" value="4" required> 收集所有相關資料，進行詳細分析後再決定。</label><br>
+                <label><input type="radio" name="q36" value="3"> 依賴過去經驗，迅速做出決定。</label><br>
+                <label><input type="radio" name="q36" value="2"> 請求同事或上司的意見，再做決定。</label><br>
+                <label><input type="radio" name="q36" value="1"> 隨機選擇一個方案，快速決策。</label><br>
+            </div>
+            <button type="submit">提交</button>
+        </form>
+        <div class="error" id="error-message"></div>
+        <div id="result"></div>
+        <canvas id="radarChart"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.getElementById('quiz-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            let errorMessage = document.getElementById('error-message');
+            errorMessage.innerText = '';
+
+            let form = document.getElementById('quiz-form');
+            let formData = new FormData(form);
+            let totalQuestions = 36;
+            let answeredQuestions = 0;
+
+            for (let value of formData.values()) {
+                if (value) answeredQuestions++;
+            }
+
+            if (answeredQuestions < totalQuestions) {
+                errorMessage.innerText = '請回答所有問題再提交。';
+                return;
+            }
+
+            let scores = {
+                "親和力": 0,
+                "傾聽客戶需求": 0,
+                "自信": 0,
+                "充滿熱情": 0,
+                "強烈的企圖心": 0,
+                "強大的感染力": 0,
+                "優秀的執行力": 0,
+                "判斷最有效率的行動": 0,
+                "堅定信念": 0,
+                "情緒穩定": 0,
+                "鋼鐵意志": 0
+            };
+
+            let maxScores = {
+                "親和力": 24,
+                "傾聽客戶需求": 24,
+                "自信": 24,
+                "充滿熱情": 24,
+                "強烈的企圖心": 24,
+                "強大的感染力": 24,
+                "優秀的執行力": 24,
+                "判斷最有效率的行動": 24,
+                "堅定信念": 24,
+                "情緒穩定": 24,
+                "鋼鐵意志": 24
+            };
+
+            formData.forEach((value, key) => {
+                let questionNumber = parseInt(key.substring(1));
+                let score = parseInt(value);
+
+                if ([1, 2, 3, 4, 5, 6].includes(questionNumber)) {
+                    scores["親和力"] += score;
+                } else if ([7, 8, 9, 10, 11, 12].includes(questionNumber)) {
+                    scores["傾聽客戶需求"] += score;
+                } else if ([13, 14, 15, 16, 17, 18].includes(questionNumber)) {
+                    scores["自信"] += score;
+                } else if ([19, 20, 21, 22, 23, 24].includes(questionNumber)) {
+                    scores["充滿熱情"] += score;
+                } else if ([25, 26, 27, 28, 29, 30].includes(questionNumber)) {
+                    scores["強烈的企圖心"] += score;
+                } else if ([31, 32].includes(questionNumber)) {
+                    scores["強大的感染力"] += score;
+                } else if ([33, 34].includes(questionNumber)) {
+                    scores["優秀的執行力"] += score;
+                } else if ([35].includes(questionNumber)) {
+                    scores["判斷最有效率的行動"] += score;
+                } else if ([36].includes(questionNumber)) {
+                    scores["堅定信念"] += score;
+                } else if ([32].includes(questionNumber)) {
+                    scores["情緒穩定"] += score;
+                } else if ([32].includes(questionNumber)) {
+                    scores["鋼鐵意志"] += score;
+                }
+            });
+
+            let resultText = "測驗結果：\n";
+            for (let trait in scores) {
+                resultText += `${trait}: ${scores[trait]} / ${maxScores[trait]}\n`;
+            }
+
+            document.getElementById('result').innerText = resultText;
+
+            let ctx = document.getElementById('radarChart').getContext('2d');
+            let radarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: Object.keys(scores),
+                    datasets: [{
+                        label: '測驗結果',
+                        data: Object.values(scores),
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scale: {
+                        ticks: { beginAtZero: true, max: 24 }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
