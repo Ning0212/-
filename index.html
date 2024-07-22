@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>適性測驗</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            text-align: center;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question p {
+            font-weight: bold;
+        }
+        .question label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .result {
+            margin-top: 20px;
+            text-align: center;
+        }
+        #radarChart {
+            max-width: 600px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>適性測驗</h1>
+        <form id="testForm">
+            <!-- Questions 1 to 36 -->
+            <div class="question">
+                <p>1. 在一個社交活動中，你遇到了一群陌生人，你會怎麼做？</p>
+                <label><input type="radio" name="q1" value="4"> a) 主動介紹自己並開始交談。</label>
+                <label><input type="radio" name="q1" value="3"> b) 等待別人來接觸自己。</label>
+                <label><input type="radio" name="q1" value="2"> c) 找到一個熟悉的朋友，並與他們待在一起。</label>
+                <label><input type="radio" name="q1" value="1"> d) 找一個安靜的角落，避免交談。</label>
+            </div>
+            <div class="question">
+                <p>2. 在與團隊合作時，你會怎麼做？</p>
+                <label><input type="radio" name="q2" value="4"> a) 主動提出自己的建議並參與討論。</label>
+                <label><input type="radio" name="q2" value="1"> b) 將自己的工作做好即可。</label>
+                <label><input type="radio" name="q2" value="2"> c) 等待別人來請教自己。</label>
+                <label><input type="radio" name="q2" value="3"> d) 在需要時提供幫助。</label>
+            </div>
+            <div class="question">
+                <p>3. 當你遇到意外情況時，你會怎麼做？</p>
+                <label><input type="radio" name="q3" value="4"> a) 迅速適應變化，並調整自己的計劃。</label>
+                <label><input type="radio" name="q3" value="3"> b) 暫時停止工作，等待情況穩定。</label>
+                <label><input type="radio" name="q3" value="1"> c) 感到不知所措，無法應對。</label>
+                <label><input type="radio" name="q3" value="2"> d) 表現出焦慮，影響工作進度。</label>
+            </div>
+            <div class="question">
+                <p>4. 當你有機會學習新技能時，你會怎麼做？</p>
+                <label><input type="radio" name="q4" value="4"> a) 主動學習，並應用到工作中。</label>
+                <label><input type="radio" name="q4" value="1"> b) 覺得學習新技能太麻煩，選擇不學習。</label>
+                <label><input type="radio" name="q4" value="2"> c) 只在需要時學習，平時不主動。</label>
+                <label><input type="radio" name="q4" value="3"> d) 在有時間的情況下學習。</label>
+            </div>
+            <div class="question">
+                <p>5. 當你面對長期目標和持久性挑戰時，你會怎麼做？</p>
+                <label><input type="radio" name="q5" value="4"> a) 制定詳細計劃，逐步實現目標。</label>
+                <label><input type="radio" name="q5" value="1"> b) 覺得目標太遙遠，無法開始。</label>
+                <label><input type="radio" name="q5" value="3"> c) 設定中途目標，逐步推進。</label>
+                <label><input type="radio" name="q5" value="2"> d) 覺得長期目標難以實現，選擇短期目標。</label>
+            </div>
+            <div class="question">
+                <p>6. 當你在壓力下工作時，你會怎麼做？</p>
+                <label><input type="radio" name="q6" value="4"> a) 保持冷静，繼續按計劃進行。</label>
+                <label><input type="radio" name="q6" value="1"> b) 壓力太大，無法正常工作。</label>
+                <label><input type="radio" name="q6" value="2"> c) 感到壓力大，但還是努力工作。</label>
+                <label><input type="radio" name="q6" value="3"> d) 找到減壓的方法，繼續工作。</label>
+            </div>
+            <div class="question">
+                <p>7. 當你需要做出重要決策時，你會怎麼做？</p>
+                <label><input type="radio" name="q7" value="4"> a) 分析所有選項，做出最佳決策。</label>
+                <label><input type="radio" name="q7" value="1"> b) 隨機選擇，看運氣。</label>
+                <label><input type="radio" name="q7" value="2"> c) 根據過去經驗做決定。</label>
+                <label><input type="radio" name="q7" value="3"> d) 征求他人意見，再做決定。</label>
+            </div>
+            <div class="question">
+                <p>8. 當你面對困難的任務時，你會怎麼做？</p>
+                <label><input type="radio" name="q8" value="4"> a) 積極尋求解決方案。</label>
+                <label><input type="radio" name="q8" value="2"> b) 等待別人的指導。</label>
+                <label><input type="radio" name="q8" value="1"> c) 感到困難，選擇放棄。</label>
+                <label><input type="radio" name="q8" value="3"> d) 試圖自己解決問題。</label>
+            </div>
+            <div class="question">
+                <p>9. 當你遇到挑戰時，你會怎麼做？</p>
+                <label><input type="radio" name="q9" value="4"> a) 擁抱挑戰，並享受過程。</label>
+                <label><input type="radio" name="q9" value="1"> b) 覺得壓力過大，選擇放棄。</label>
+                <label><input type="radio" name="q9" value="2"> c) 感到不知所措，無法應對。</label>
+                <label><input type="radio" name="q9" value="3"> d) 尋求他人的幫助。</label>
+            </div>
+            <div class="question">
+                <p>10. 當你需要與他人合作時，你會怎麼做？</p>
+                <label><input type="radio" name="q10" value="4"> a) 主動協調，確保團隊合作順利。</label>
+                <label><input type="radio" name="q10" value="2"> b) 提出自己的意見，並等待回應。</label>
+                <label><input type="radio" name="q10" value="3"> c) 根據需要提供幫助。</label>
+                <label><input type="radio" name="q10" value="1"> d) 將自己的工作做好即可。</label>
+            </div>
+            <div class="question">
+                <p>11. 當你面對工作壓力時，你會怎麼做？</p>
+                <label><input type="radio" name="q11" value="4"> a) 視壓力為挑戰，積極面對。</label>
+                <label><input type="radio" name="q11" value="3"> b) 尋求解決壓力的方法。</label>
+                <label><input type="radio" name="q11" value="2"> c) 感到壓力過大，影響工作表現。</label>
+                <label><input type="radio" name="q11" value="1"> d) 壓力過大，無法工作。</label>
+            </div>
+            <div class="question">
+                <p>12. 當你需要學習新技能時，你會怎麼做？</p>
+                <label><input type="radio" name="q12" value="4"> a) 主動學習，提升自己。</label>
+                <label><input type="radio" name="q12" value="1"> b) 學習新技能感到困難，選擇放棄。</label>
+                <label><input type="radio" name="q12" value="3"> c) 根據需要學習。</label>
+                <label><input type="radio" name="q12" value="2"> d) 在時間允許的情況下學習。</label>
+            </div>
+            <div class="question">
+                <p>13. 當你遇到挑戰時，你會怎麼做？</p>
+                <label><input type="radio" name="q13" value="4"> a) 尋求解決方案，克服挑戰。</label>
+                <label><input type="radio" name="q13" value="2"> b) 尋求他人的幫助。</label>
+                <label><input type="radio" name="q13" value="1"> c) 覺得挑戰過大，選擇放棄。</label>
+                <label><input type="radio" name="q13" value="3"> d) 感到困難，嘗試解決。</label>
+            </div>
+            <div class="question">
+                <p>14. 當你需要做出決策時，你會怎麼做？</p>
+                <label><input type="radio" name="q14" value="4"> a) 分析所有選項，做出最佳決策。</label>
+                <label><input type="radio" name="q14" value="3"> b) 征求他人的意見，再做決定。</label>
+                <label><input type="radio" name="q14" value="2"> c) 根據經驗做決定。</label>
+                <label><input type="radio" name="q14" value="1"> d) 隨機選擇，看運氣。</label>
+            </div>
+            <div class="question">
+                <p>15. 當你面對困難的任務時，你會怎麼做？</p>
+                <label><input type="radio" name="q15" value="4"> a) 積極尋求解決方案。</label>
+                <label><input type="radio" name="q15" value="2"> b) 等待別人的指導。</label>
+                <label><input type="radio" name="q15" value="1"> c) 感到困難，選擇放棄。</label>
+                <label><input type="radio" name="q15" value="3"> d) 試圖自己解決問題。</label>
+            </div>
+            <div class="question">
+                <p>16. 當你面對挑戰時，你會怎麼做？</p>
+                <label><input type="radio" name="q16" value="4"> a) 擁抱挑戰，並享受過程。</label>
+                <label><input type="radio" name="q16" value="1"> b) 覺得壓力過大，選擇放棄。</label>
+                <label><input type="radio" name="q16" value="2"> c) 感到不知所措，無法應對。</label>
+                <label><input type="radio" name="q16" value="3"> d) 尋求他人的幫助。</label>
+            </div>
+            <div class="question">
+                <p>17. 當你需要與他人合作時，你會怎麼做？</p>
+                <label><input type="radio" name="q17" value="4"> a) 主動協調，確保團隊合作順利。</label>
+                <label><input type="radio" name="q17" value="2"> b) 提出自己的意見，並等待回應。</label>
+                <label><input type="radio" name="q17" value="3"> c) 根據需要提供幫助。</label>
+                <label><input type="radio" name="q17" value="1"> d) 將自己的工作做好即可。</label>
+            </div>
+            <div class="question">
+                <p>18. 當你面對工作壓力時，你會怎麼做？</p>
+                <label><input type="radio" name="q18" value="4"> a) 視壓力為挑戰，積極面對。</label>
+                <label><input type="radio" name="q18" value="3"> b) 尋求解決壓力的方法。</label>
+                <label><input type="radio" name="q18" value="2"> c) 感到壓力過大，影響工作表現。</label>
+                <label><input type="radio" name="q18" value="1"> d) 壓力過大，無法工作。</label>
+            </div>
+            <div class="question">
+                <p>19. 當你需要學習新技能時，你會怎麼做？</p>
+                <label><input type="radio" name="q19" value="4"> a) 主動學習，提升自己。</label>
+                <label><input type="radio" name="q19" value="1"> b) 學習新技能感到困難，選擇放棄。</label>
+                <label><input type="radio" name="q19" value="3"> c) 根據需要學習。</label>
+                <label><input type="radio" name="q19" value="2"> d) 在時間允許的情況下學習。</label>
+            </div>
+            <div class="question">
+                <p>20. 當你遇到挑戰時，你會怎麼做？</p>
+                <label><input type="radio" name="q20" value="4"> a) 尋求解決方案，克服挑戰。</label>
+                <label><input type="radio" name="q20" value="2"> b) 尋求他人的幫助。</label>
+                <label><input type="radio" name="q20" value="1"> c) 覺得挑戰過大，選擇放棄。</label>
+                <label><input type="radio" name="q20" value="3"> d) 感到困難，嘗試解決。</label>
+            </div>
+            <div class="question">
+                <p>21. 當你需要做出決策時，你會怎麼做？</p>
+                <label><input type="radio" name="q21" value="4"> a) 分析所有選項，做出最佳決策。</label>
+                <label><input type="radio" name="q21" value="3"> b) 征求他人的意見，再做決定。</label>
+                <label><input type="radio" name="q21" value="2"> c) 根據經驗做決定。</label>
+                <label><input type="radio" name="q21" value="1"> d) 隨機選擇，看運氣。</label>
+            </div>
+            <div class="question">
+                <p>22. 當你面對困難的任務時，你會怎麼做？</p>
+                <label><input type="radio" name="q22" value="4"> a) 積極尋求解決方案。</label>
+                <label><input type="radio" name="q22" value="2"> b) 等待別人的指導。</label>
+                <label><input type="radio" name="q22" value="1"> c) 感到困難，選擇放棄。</label>
+                <label><input type="radio" name="q22" value="3"> d) 試圖自己解決問題。</label>
+            </div>
+            <div class="question">
+                <p>23. 當你面對挑戰時，你會怎麼做？</p>
+                <label><input type="radio" name="q23" value="4"> a) 擁抱挑戰，並享受過程。</label>
+                <label><input type="radio" name="q23" value="1"> b) 覺得壓力過大，選擇放棄。</label>
+                <label><input type="radio" name="q23" value="2"> c) 感到不知所措，無法應對。</label>
+                <label><input type="radio" name="q23" value="3"> d) 尋求他人的幫助。</label>
+            </div>
+            <div class="question">
+                <p>24. 當你需要與他人合作時，你會怎麼做？</p>
+                <label><input type="radio" name="q24" value="4"> a) 主動協調，確保團隊合作順利。</label>
+                <label><input type="radio" name="q24" value="2"> b) 提出自己的意見，並等待回應。</label>
+                <label><input type="radio" name="q24" value="3"> c) 根據需要提供幫助。</label>
+                <label><input type="radio" name="q24" value="1"> d) 將自己的工作做好即可。</label>
+            </div>
+            <div class="question">
+                <p>25. 當你面對工作壓力時，你會怎麼做？</p>
+                <label><input type="radio" name="q25" value="4"> a) 視壓力為挑戰，積極面對。</label>
+                <label><input type="radio" name="q25" value="3"> b) 尋求解決壓力的方法。</label>
+                <label><input type="radio" name="q25" value="2"> c) 感到壓力過大，影響工作表現。</label>
+                <label><input type="radio" name="q25" value="1"> d) 壓力過大，無法工作。</label>
+            </div>
+            <div class="question">
+                <p>26. 當你需要學習新技能時，你會怎麼做？</p>
+                <label><input type="radio" name="q26" value="4"> a) 主動學習，提升自己。</label>
+                <label><input type="radio" name="q26" value="1"> b) 學習新技能感到困難，選擇放棄。</label>
+                <label><input type="radio" name="q26" value="3"> c) 根據需要學習。</label>
+                <label><input type="radio" name="q26" value="2"> d) 在時間允許的情況下學習。</label>
+            </div>
+            <div class="question">
+                <p>27. 當你遇到挑戰時，你會怎麼做？</p>
+                <label><input type="radio" name="q27" value="4"> a) 尋求解決方案，克服挑戰。</label>
+                <label><input type="radio" name="q27" value="2"> b) 尋求他人的幫助。</label>
+                <label><input type="radio" name="q27" value="1"> c) 覺得挑戰過大，選擇放棄。</label>
+                <label><input type="radio" name="q27" value="3"> d) 感到困難，嘗試解決。</label>
+            </div>
+            <div class="question">
+                <p>28. 當你需要做出決策時，你會怎麼做？</p>
+                <label><input type="radio" name="q28" value="4"> a) 分析所有選項，做出最佳決策。</label>
+                <label><input type="radio" name="q28" value="3"> b) 征求他人的意見，再做決定。</label>
+                <label><input type="radio" name="q28" value="2"> c) 根據經驗做決定。</label>
+                <label><input type="radio" name="q28" value="1"> d) 隨機選擇，看運氣。</label>
+            </div>
+            <div class="question">
+                <p>29. 當你面對困難的任務時，你會怎麼做？</p>
+                <label><input type="radio" name="q29" value="4"> a) 積極尋求解決方案。</label>
+                <label><input type="radio" name="q29" value="2"> b) 等待別人的指導。</label>
+                <label><input type="radio" name="q29" value="1"> c) 感到困難，選擇放棄。</label>
+                <label><input type="radio" name="q29" value="3"> d) 試圖自己解決問題。</label>
+            </div>
+            <div class="question">
+                <p>30. 當你面對挑戰時，你會怎麼做？</p>
+                <label><input type="radio" name="q30" value="4"> a) 擁抱挑戰，並享受過程。</label>
+                <label><input type="radio" name="q30" value="1"> b) 覺得壓力過大，選擇放棄。</label>
+                <label><input type="radio" name="q30" value="2"> c) 感到不知所措，無法應對。</label>
+                <label><input type="radio" name="q30" value="3"> d) 尋求他人的幫助。</label>
+            </div>
+            <div class="question">
+                <p>31. 當你需要與他人合作時，你會怎麼做？</p>
+                <label><input type="radio" name="q31" value="4"> a) 主動協調，確保團隊合作順利。</label>
+                <label><input type="radio" name="q31" value="2"> b) 提出自己的意見，並等待回應。</label>
+                <label><input type="radio" name="q31" value="3"> c) 根據需要提供幫助。</label>
+                <label><input type="radio" name="q31" value="1"> d) 將自己的工作做好即可。</label>
+            </div>
+            <div class="question">
+                <p>32. 當你面對工作壓力時，你會怎麼做？</p>
+                <label><input type="radio" name="q32" value="4"> a) 視壓力為挑戰，積極面對。</label>
+                <label><input type="radio" name="q32" value="3"> b) 尋求解決壓力的方法。</label>
+                <label><input type="radio" name="q32" value="2"> c) 感到壓力過大，影響工作表現。</label>
+                <label><input type="radio" name="q32" value="1"> d) 壓力過大，無法工作。</label>
+            </div>
+            <div class="question">
+                <p>33. 當你需要學習新技能時，你會怎麼做？</p>
+                <label><input type="radio" name="q33" value="4"> a) 主動學習，提升自己。</label>
+                <label><input type="radio" name="q33" value="1"> b) 學習新技能感到困難，選擇放棄。</label>
+                <label><input type="radio" name="q33" value="3"> c) 根據需要學習。</label>
+                <label><input type="radio" name="q33" value="2"> d) 在時間允許的情況下學習。</label>
+            </div>
+            <div class="question">
+                <p>34. 當你遇到挑戰時，你會怎麼做？</p>
+                <label><input type="radio" name="q34" value="4"> a) 尋求解決方案，克服挑戰。</label>
+                <label><input type="radio" name="q34" value="2"> b) 尋求他人的幫助。</label>
+                <label><input type="radio" name="q34" value="1"> c) 覺得挑戰過大，選擇放棄。</label>
+                <label><input type="radio" name="q34" value="3"> d) 感到困難，嘗試解決。</label>
+            </div>
+            <div class="question">
+                <p>35. 當你需要做出決策時，你會怎麼做？</p>
+                <label><input type="radio" name="q35" value="4"> a) 分析所有選項，做出最佳決策。</label>
+                <label><input type="radio" name="q35" value="3"> b) 征求他人的意見，再做決定。</label>
+                <label><input type="radio" name="q35" value="2"> c) 根據經驗做決定。</label>
+                <label><input type="radio" name="q35" value="1"> d) 隨機選擇，看運氣。</label>
+            </div>
+            <div class="question">
+                <p>36. 當你面對困難的任務時，你會怎麼做？</p>
+                <label><input type="radio" name="q36" value="4"> a) 積極尋求解決方案。</label>
+                <label><input type="radio" name="q36" value="2"> b) 等待別人的指導。</label>
+                <label><input type="radio" name="q36" value="1"> c) 感到困難，選擇放棄。</label>
+                <label><input type="radio" name="q36" value="3"> d) 試圖自己解決問題。</label>
+            </div>
+            <button type="button" onclick="calculateScore()">提交</button>
+        </form>
+        <div class="result">
+            <h2>結果</h2>
+            <p>情緒穩定: <span id="score1">0</span> / 24</p>
+            <p>鋼鐵意志: <span id="score2">0</span> / 24</p>
+            <p>適應力: <span id="score3">0</span> / 24</p>
+            <p>人際交往: <span id="score4">0</span> / 24</p>
+            <canvas id="radarChart"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function calculateScore() {
+            var score1 = 0, score2 = 0, score3 = 0, score4 = 0;
+            for (var i = 1; i <= 36; i++) {
+                var radios = document.getElementsByName('q' + i);
+                for (var j = 0; j < radios.length; j++) {
+                    if (radios[j].checked) {
+                        if (i % 4 == 1) score1 += parseInt(radios[j].value);
+                        if (i % 4 == 2) score2 += parseInt(radios[j].value);
+                        if (i % 4 == 3) score3 += parseInt(radios[j].value);
+                        if (i % 4 == 0) score4 += parseInt(radios[j].value);
+                    }
+                }
+            }
+            document.getElementById('score1').textContent = score1;
+            document.getElementById('score2').textContent = score2;
+            document.getElementById('score3').textContent = score3;
+            document.getElementById('score4').textContent = score4;
+
+            var ctx = document.getElementById('radarChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['情緒穩定', '鋼鐵意志', '適應力', '人際交往'],
+                    datasets: [{
+                        label: '得分',
+                        data: [score1, score2, score3, score4],
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scale: {
+                        ticks: {
+                            beginAtZero: true,
+                            max: 24
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
