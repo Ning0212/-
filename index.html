@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>適性測驗</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            text-align: center;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question p {
+            font-weight: bold;
+        }
+        .question label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .result {
+            margin-top: 20px;
+            text-align: center;
+        }
+        #radarChart {
+            max-width: 600px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>適性測驗</h1>
+        <form id="testForm">
+            <div class="question">
+                <p>1. 在一個社交活動中，你遇到了一群陌生人，你會怎麼做？</p>
+                <label><input type="radio" name="q1" value="1"> a) 找一個安靜的角落，避免交談。</label>
+                <label><input type="radio" name="q1" value="4"> b) 主動介紹自己並開始交談。</label>
+                <label><input type="radio" name="q1" value="2"> c) 找到一個熟悉的朋友，並與他們待在一起。</label>
+                <label><input type="radio" name="q1" value="3"> d) 等待別人來接觸自己。</label>
+            </div>
+            <div class="question">
+                <p>2. 在與團隊合作時，你會怎麼做？</p>
+                <label><input type="radio" name="q2" value="2"> a) 等待別人來請教自己。</label>
+                <label><input type="radio" name="q2" value="4"> b) 主動提出自己的建議並參與討論。</label>
+                <label><input type="radio" name="q2" value="3"> c) 在需要時提供幫助。</label>
+                <label><input type="radio" name="q2" value="1"> d) 將自己的工作做好即可。</label>
+            </div>
+            <div class="question">
+                <p>32. 當你遇到意外情況時，你會怎麼做？</p>
+                <label><input type="radio" name="q32" value="3"> a) 暫時停止工作，等待情況穩定。</label>
+                <label><input type="radio" name="q32" value="4"> b) 迅速適應變化，並調整自己的計劃。</label>
+                <label><input type="radio" name="q32" value="2"> c) 感到不知所措，無法應對。</label>
+                <label><input type="radio" name="q32" value="1"> d) 表現出焦慮，影響工作進度。</label>
+            </div>
+            <div class="question">
+                <p>33. 當你有機會學習新技能時，你會怎麼做？</p>
+                <label><input type="radio" name="q33" value="2"> a) 只在需要時學習，平時不主動。</label>
+                <label><input type="radio" name="q33" value="4"> b) 主動學習，並應用到工作中。</label>
+                <label><input type="radio" name="q33" value="3"> c) 在有時間的情況下學習。</label>
+                <label><input type="radio" name="q33" value="1"> d) 覺得學習新技能太麻煩，選擇不學習。</label>
+            </div>
+            <div class="question">
+                <p>34. 當你面對長期目標和持久性挑戰時，你會怎麼做？</p>
+                <label><input type="radio" name="q34" value="3"> a) 設定中途目標，逐步推進。</label>
+                <label><input type="radio" name="q34" value="4"> b) 制定詳細計劃，逐步實現目標。</label>
+                <label><input type="radio" name="q34" value="1"> c) 覺得目標太遙遠，無法開始。</label>
+                <label><input type="radio" name="q34" value="2"> d) 覺得長期目標難以實現，選擇短期目標。</label>
+            </div>
+            <div class="question">
+                <p>35. 當你在壓力下工作時，你會怎麼做？</p>
+                <label><input type="radio" name="q35" value="1"> a) 壓力太大，無法正常工作。</label>
+                <label><input type="radio" name="q35" value="4"> b) 保持冷靜，繼續按計劃進行。</label>
+                <label><input type="radio" name="q35" value="3"> c) 找到減壓的方法，繼續工作。</label>
+                <label><input type="radio" name="q35" value="2"> d) 感到壓力大，但還是努力工作。</label>
+            </div>
+            <div class="question">
+                <p>36. 當你需要做出重要決策時，你會怎麼做？</p>
+                <label><input type="radio" name="q36" value="4"> a) 分析所有選項，做出最佳決策。</label>
+                <label><input type="radio" name="q36" value="3"> b) 征求他人意見，再做決定。</label>
+                <label><input type="radio" name="q36" value="2"> c) 根據過去經驗做決定。</label>
+                <label><input type="radio" name="q36" value="1"> d) 隨機選擇，看運氣。</label>
+            </div>
+            <div style="text-align: center;">
+                <button type="button" onclick="calculateResult()">提交</button>
+            </div>
+        </form>
+        <div id="result" class="result" style="display: none;">
+            <h2>測驗結果</h2>
+            <p id="totalScore"></p>
+            <div id="radarChart"></div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function calculateResult() {
+            const form = document.getElementById('testForm');
+            const formData = new FormData(form);
+            const scores = {
+                親和力: 0,
+                傾聽客戶需求: 0,
+                情緒穩定: 0,
+                鋼鐵意志: 0
+            };
+            const maxScores = {
+                親和力: 24,
+                傾聽客戶需求: 24,
+                情緒穩定: 24,
+                鋼鐵意志: 24
+            };
+            const questionGroups = {
+                親和力: [1, 2, 3, 4, 5, 6],
+                傾聽客戶需求: [7, 8, 9, 10, 11, 12],
+                情緒穩定: [32, 33, 34, 35, 36],
+                鋼鐵意志: [27, 28, 29, 30, 31]
+            };
+
+            for (let [trait, questions] of Object.entries(questionGroups)) {
+                questions.forEach(q => {
+                    scores[trait] += parseInt(formData.get('q' + q)) || 0;
+                });
+            }
+
+            document.getElementById('totalScore').textContent = `您的總分是：${scores.親和力} / ${maxScores.親和力}，${scores.傾聽客戶需求} / ${maxScores.傾聽客戶需求}，${scores.情緒穩定} / ${maxScores.情緒穩定}，${scores.鋼鐵意志} / ${maxScores.鋼鐵意志}`;
+            document.getElementById('result').style.display = 'block';
+
+            const data = {
+                labels: ['親和力', '傾聽客戶需求', '情緒穩定', '鋼鐵意志'],
+                datasets: [{
+                    label: '測驗結果',
+                    data: [scores.親和力, scores.傾聽客戶需求, scores.情緒穩定, scores.鋼鐵意志],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            };
+
+            const config = {
+                type: 'radar',
+                data: data,
+                options: {
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: false
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 24
+                        }
+                    }
+                }
+            };
+
+            new Chart(document.getElementById('radarChart'), config);
+        }
+    </script>
+</body>
+</html>
